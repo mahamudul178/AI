@@ -1,0 +1,287 @@
+01/   Interfacing the LED blinking using PIC16F877A 
+Code:
+void main() {
+      TRISB=0x00;
+      PORTB=0x00;
+      while(1)
+      { 
+        portb.f0=0x00;
+        delay_ms(300);
+        portb.f0=0xff;
+        delay_ms(300);
+      }
+}
+
+-------------------------------------------------------------------------------------------
+02/   Interfacing the 7 segment LED display using PIC16F877A Microcontroller
+code:
+char arr[]={ 0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0x80,0x90};
+int i;
+void main() {
+     TRISB=0;
+     PORTB=0;
+     while(1)
+     {
+      for(i=0; i<=9; i++)
+      {
+       portb=arr[i];
+       delay_ms(500);
+      }
+     }
+}
+
+
+------------------------------------------------------------------
+03/Write a program to display ADC value in the virtual terminal using PIC Microcontroller.
+Code:
+int valADC, valADC1;
+char x[4];
+void main() {
+UART1_Init(9600);
+ADC_Init();
+while(1) {
+valADC = ADC_Read(0);
+valADC1 = ADC_Read(1);
+IntToStr(valADC,x);
+UART1_Write_Text("Analog value =");
+UART1_Write_Text(x);
+UART1_Write_Text(" ");
+IntToStr(valADC1,x);
+UART1_Write_Text("Analog value =");
+UART1_Write_Text(x);
+UART1_Write(13);
+Delay_ms(1000);
+}
+}
+--------------------------------------------------------------
+04/  Multiplexing of 7 segment LED display using  PIC16F877A Microcontroller. 
+ code: 
+
+char arrCC[]={ 0x3F,0x06,0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F,0x6F };
+char arrCA[]={ 0xC0,0xF9,0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80,0x90 };
+      int i, j, x, y;
+void main() {
+     trisb=0;
+     trisc=0;
+     portb=0;
+     portc=0;
+     while(1){
+     for(i=0; i<22; i++){
+      x=i/10;
+      y=i%10;
+      for(j=1; j<=50; j++){
+       portc.f0=0;
+       portb=arrCC[x];
+       delay_ms(10);
+       portc.f0=1;
+       portc.f1=0;
+       portb=arrCC[y];
+       delay_ms(10);
+       portc.f1=1;
+      }
+     }
+     }
+}
+
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+05/  Write a program to interface LED wit5h push button using PIC Microcontroller
+code: 
+void main(){
+TRISB = 0x00;
+TRISC = 0Xff;
+portb = 0x00;
+while(1){
+if(portc.f0 == 0xff)
+portb.f0 = 0xff;
+else
+portb.f0 = 0x00;
+}
+}
+
+-------------------------------------------------------------------------------------------
+06/ Write a program for dot matrix display interfacing with PIC Microcontroller
+Code:
+
+
+
+
+----------------------------------------------------------------------------
+07/  Interfacing the LM35 temperature sensor with LCD display using PIC16F877A Microcontroller.
+code:
+
+
+  // LCD module connections
+sbit LCD_RS at RB0_bit;
+sbit LCD_EN at RB1_bit;
+sbit LCD_D4 at RB2_bit;
+sbit LCD_D5 at RB3_bit;
+sbit LCD_D6 at RB4_bit;
+sbit LCD_D7 at RB5_bit;
+
+sbit LCD_RS_Direction at TRISB0_bit;
+sbit LCD_EN_Direction at TRISB1_bit;
+sbit LCD_D4_Direction at TRISB2_bit;
+sbit LCD_D5_Direction at TRISB3_bit;
+sbit LCD_D6_Direction at TRISB4_bit;
+sbit LCD_D7_Direction at TRISB5_bit;
+// End LCD module connections
+    int temp[40], far[20], cel[30];
+    int valAdc, faharen,i,k;
+
+void main() {
+     int i;
+     uart1_init(9600);
+       Lcd_Init();                        // Initialize LCD
+  Lcd_Cmd(_LCD_CLEAR);               // Clear display
+  Lcd_Cmd(_LCD_CURSOR_OFF);
+              i=0;
+            while(1){
+             valAdc=adc_read(0);
+             faharen=(valAdc*9/5)+32;
+             intTostr(valAdc,cel);
+             inttostr(faharen,far);
+             lcd_out(1,1,"Celceius");
+             lcd_out(1,10,cel);
+             lcd_out(2,1,"Farehite");
+             lcd_out(2,10,far);
+            
+            }
+}
+-----------------------------------------------------------------------------------------
+08/ Write a program to control a high voltage load using mechanical relay.
+Code:
+
+void main() {
+     trisb=0;
+     portb=0;
+     while(1){
+      portb.f0=1;
+      delay_ms(500);
+      portb.f0=0;
+      delay_ms(500);
+     }
+}
+
+
+-------------------------------------------------------------------------------------------
+09/ Write a program for DC motor speed control using PWM and PIC Microcontroller.
+Code:
+void main() {
+unsigned short duty = 0;
+TRISB = 0x00;
+TRISC = 0x00;
+TRISD = 0xff;
+portb.f0 = 0xff; // initialize
+portb.f1 = 0x00;
+PWM1_Init(1000); // Initialize PWM
+PWM1_Start(); // start PWM
+PWM1_Set_Duty(duty); // set current
+//duty for PWM1
+while(1)
+{
+// Increment Button Activities
+if(portd.f0 ==1)
+{
+delay_ms(200);
+if(duty <= 240)
+{
+if(portd.f0 == 1)
+{
+duty = duty +10;
+PWM1_Set_Duty(duty);
+}
+}
+}
+// Decrement Button Activities
+if(portd.f1 == 1)
+{
+delay_ms(200);
+if(duty >= 10)
+{
+if(portd.f1 == 1)
+{
+duty = duty - 1;
+PWM1_Set_Duty(duty);
+}
+}
+}
+}
+}
+------------------------------------------------------------------------------------
+10/  Write a program to control servo motor using PIC Microcontroller.
+Code:
+void rotateLeft90();
+void rotateZero();
+void rotateRight90();
+int i;
+void main() {
+TRISB = 0X00;
+TRISC = 0XFF;
+portb = 0x00;
+rotateZero();
+while(1) {
+if(portc.f0 == 0xff) {
+rotateLeft90();
+}
+if(portc.f1 == 0xff) {
+rotateZero();
+}
+if(portc.f2 == 0xff) {
+rotateRight90();
+}
+}
+}
+void rotateLeft90() {
+for(i=0;i<50;i++) {
+portb.f0=1;
+delay_us(800);
+portb.f0=0;
+delay_us(19200);
+}
+}
+void rotateZero() {
+for(i=0;i<50;i++) {
+portb.f0=1;
+delay_us(1500);
+portb.f0=0;
+delay_us(18500);
+}
+}
+void rotateRight90() {
+for(i=0;i<50;i++) {
+portb.f0=1;
+delay_us(2200);
+portb.f0=0;
+delay_us(17800);
+}
+}
+
+
+
+
+-------------------------------------------------------------------------------------
+11/ Write a program for interfacing stepper motor using PIC Microcontroller
+Code:  
+void main() {
+TRISD = 0X00;
+portd = 0x00;
+while(1)
+{
+portd = 0b00000011;
+delay_ms(50);
+portd = 0b00000110;
+delay_ms(50);
+portd = 0b00001100;
+delay_ms(50);
+portd = 0b00001001;
+delay_ms(50);
+}
+}
+
+
+
+
+---------------------------------------------------------------------------------------
+
